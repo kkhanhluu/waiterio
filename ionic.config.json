@@ -1,0 +1,7 @@
+{
+  "name": "waiterio",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
