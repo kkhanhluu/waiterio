@@ -1,0 +1,23 @@
+.container {
+  background-color: white;
+  color: black;
+  height: 100%;
+}
+
+.order {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ordersContainer {
+  border-bottom: 1px solid gray;
+}
+
+.orderInformation {
+  padding: 1rem;
+}
+
+.totalPrice {
+  display: flex;
+  justify-content: space-between;
+}

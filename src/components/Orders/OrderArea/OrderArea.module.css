@@ -1,0 +1,24 @@
+.title {
+  text-transform: uppercase;
+  margin: 2rem 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.tableContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.table {
+  display: block;
+  border: 1px solid gray;
+  border-radius: 10px;
+  padding: 2rem 4rem;
+  margin-top: 2rem;
+}
