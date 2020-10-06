@@ -145,49 +145,39 @@ const TableOrderCreate: React.FC<{ match: any }> = (props) => {
     } else return null;
   };
   return (
-    <>
-      <IonHeader translucent>
-        <IonToolbar>
-          <IonButtons slot='start'>
-            <IonBackButton defaultHref='/orders' />
-          </IonButtons>
-          <IonTitle>Menu</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen scrollY={true}>
-        {categories.map((c: any) => (
-          <SectionItem
-            updateOrder={updateOrder}
-            key={c.categoryName}
-            category={c.categoryName}
-            dishes={c.dishes}
-            preOrders={orders}
-          />
-        ))}
-        {displayOrders()}
-        <IonItem>
-          <IonLabel position='floating'>Note</IonLabel>
-          <IonTextarea
-            value={note}
-            onIonChange={(e) => setNote(e.detail.value!)}
-          ></IonTextarea>
-        </IonItem>
-
-        <IonButton
-          style={{ marginTop: '1rem' }}
-          expand='block'
-          onClick={saveOrder}
-        >
-          Save
-        </IonButton>
-
-        <IonLoading
-          isOpen={showLoading}
-          onDidDismiss={() => setShowLoading(false)}
-          message={'Loading...'}
+    <IonContent fullscreen scrollY={true}>
+      {categories.map((c: any) => (
+        <SectionItem
+          updateOrder={updateOrder}
+          key={c.categoryName}
+          category={c.categoryName}
+          dishes={c.dishes}
+          preOrders={orders}
         />
-      </IonContent>
-    </>
+      ))}
+      {displayOrders()}
+      <IonItem>
+        <IonLabel position='floating'>Note</IonLabel>
+        <IonTextarea
+          value={note}
+          onIonChange={(e) => setNote(e.detail.value!)}
+        ></IonTextarea>
+      </IonItem>
+
+      <IonButton
+        style={{ marginTop: '1rem' }}
+        expand='block'
+        onClick={saveOrder}
+      >
+        Save
+      </IonButton>
+
+      <IonLoading
+        isOpen={showLoading}
+        onDidDismiss={() => setShowLoading(false)}
+        message={'Loading...'}
+      />
+    </IonContent>
   );
 };
 

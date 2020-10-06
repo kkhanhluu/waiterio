@@ -30,7 +30,7 @@ const TableOrder: React.FC<{ match: any }> = (props) => {
             to={`/tables/${props.match.params.area}/${props.match.params.id}/general`}
           /> */}
         </IonRouterOutlet>
-        <IonTabBar slot='bottom'>
+        <IonTabBar slot='top'>
           <IonTabButton
             tab='general'
             href={`/tables/${props.match.params.area}/${props.match.params.id}/general`}
