@@ -5,6 +5,7 @@ import {
   IonButton,
   IonButtons,
   IonCard,
+  IonContent,
   IonHeader,
   IonLabel,
   IonLoading,
@@ -155,7 +156,7 @@ const TableOrderGeneral: React.FC<{ match: any; history: any }> = (props) => {
 
   if (id && status) {
     return (
-      <div className={classes.container}>
+      <IonContent fullscreen scrollY={true}>
         <IonHeader>
           <IonToolbar>
             <IonButtons slot='start'>
@@ -168,9 +169,9 @@ const TableOrderGeneral: React.FC<{ match: any; history: any }> = (props) => {
           <IonLabel>Status: </IonLabel> {status}
         </div>
         {note ? (
-          <div className={classes.item + ' ion-padding'}>
+          <IonContent className={classes.item + ' ion-padding'}>
             <IonLabel>Note: </IonLabel> {note}
-          </div>
+          </IonContent>
         ) : null}
         {displayOrders()}
         {displayReserveButton()}
@@ -195,7 +196,7 @@ const TableOrderGeneral: React.FC<{ match: any; history: any }> = (props) => {
           onDidDismiss={() => setShowLoading(false)}
           message={'Loading...'}
         />
-      </div>
+      </IonContent>
     );
   }
   return null;
