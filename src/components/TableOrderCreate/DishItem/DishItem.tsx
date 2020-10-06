@@ -14,11 +14,15 @@ const DishItem: React.FC<{ dish: any; updateOrder: any; preOrders: any[] }> = (
   const [numberItems, setNumberItems] = useState(0);
 
   useEffect(() => {
-    const index = props.preOrders.findIndex(
-      (o: any) => o.title === props.dish.title
-    );
-    if (index >= 0) {
-      setNumberItems(props.preOrders[index].amount);
+    if (props.preOrders) {
+      const index = props.preOrders.findIndex(
+        (o: any) => o.title === props.dish.title
+      );
+      if (index >= 0) {
+        setNumberItems(props.preOrders[index].amount);
+      }
+    } else {
+      setNumberItems(0);
     }
   }, [props.preOrders, props.dish]);
 

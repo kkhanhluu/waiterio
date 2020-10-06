@@ -6,7 +6,7 @@ import {
   IonTabs,
 } from '@ionic/react';
 import React from 'react';
-import { Redirect, Route } from 'react-router';
+import { Route } from 'react-router';
 import TableOrderCreate from '../TableOrderCreate/TableOrderCreate';
 import TableOrderGeneral from '../TableOrderGeneral/TableOrderGeneral';
 

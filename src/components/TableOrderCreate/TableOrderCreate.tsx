@@ -4,7 +4,6 @@ import {
   IonHeader,
   IonToolbar,
   IonButtons,
-  IonMenuButton,
   IonTitle,
   IonContent,
   IonCard,
@@ -13,6 +12,7 @@ import {
   IonTextarea,
   IonItem,
   IonLabel,
+  IonBackButton,
 } from '@ionic/react';
 import SectionItem from './SectionItem/SectionItem';
 import classes from './TableOrderCreate.module.css';
@@ -54,8 +54,12 @@ const TableOrderCreate: React.FC<{ match: any }> = (props) => {
         )
         .then((res) => {
           console.log(res.data);
-          setOrders(res.data.orders);
-          setNote(res.data.note);
+          if (res.data.orders) {
+            setOrders(res.data.orders);
+          }
+          if (res.data.note) {
+            setNote(res.data.note);
+          }
         });
     }
   }, [props.match.params.id, props.match.params.area]);
@@ -94,7 +98,6 @@ const TableOrderCreate: React.FC<{ match: any }> = (props) => {
         orders[index].amount = amount;
       }
     }
-    console.log(orders);
 
     const totalPrice = orders.reduce(
       (total: any, order: any) => total + order.price * order.amount,
@@ -112,6 +115,7 @@ const TableOrderCreate: React.FC<{ match: any }> = (props) => {
         {
           orders,
           note,
+          status: 'besetzt',
         }
       )
       .then((res) => {
@@ -120,26 +124,9 @@ const TableOrderCreate: React.FC<{ match: any }> = (props) => {
       });
   };
 
-  return (
-    <>
-      <IonHeader translucent>
-        <IonToolbar>
-          <IonButtons slot='start'>
-            <IonMenuButton autoHide={false} menu='mainMenu'></IonMenuButton>
-          </IonButtons>
-          <IonTitle>Menu</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen scrollY={true}>
-        {categories.map((c: any) => (
-          <SectionItem
-            updateOrder={updateOrder}
-            key={c.categoryName}
-            category={c.categoryName}
-            dishes={c.dishes}
-            preOrders={orders}
-          />
-        ))}
+  const displayOrders = () => {
+    if (orders) {
+      return (
         <IonCard className={classes.orderInformation}>
           <div className={classes.ordersContainer}>
             {orders.map((o: any) => (
@@ -154,6 +141,30 @@ const TableOrderCreate: React.FC<{ match: any }> = (props) => {
             <p>{totalPrice}€</p>
           </div>
         </IonCard>
+      );
+    } else return null;
+  };
+  return (
+    <>
+      <IonHeader translucent>
+        <IonToolbar>
+          <IonButtons slot='start'>
+            <IonBackButton defaultHref='/orders' />
+          </IonButtons>
+          <IonTitle>Menu</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent fullscreen scrollY={true}>
+        {categories.map((c: any) => (
+          <SectionItem
+            updateOrder={updateOrder}
+            key={c.categoryName}
+            category={c.categoryName}
+            dishes={c.dishes}
+            preOrders={orders}
+          />
+        ))}
+        {displayOrders()}
         <IonItem>
           <IonLabel position='floating'>Note</IonLabel>
           <IonTextarea
@@ -174,7 +185,6 @@ const TableOrderCreate: React.FC<{ match: any }> = (props) => {
           isOpen={showLoading}
           onDidDismiss={() => setShowLoading(false)}
           message={'Loading...'}
-          duration={5000}
         />
       </IonContent>
     </>

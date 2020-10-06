@@ -1,20 +1,24 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import {
+  IonBackButton,
+  IonButton,
+  IonButtons,
   IonCard,
   IonHeader,
   IonLabel,
+  IonLoading,
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
 import classes from './TableOrderGeneral.module.css';
 
-const TableOrderGeneral: React.FC<{ match: any }> = (props) => {
-  console.log(props);
+const TableOrderGeneral: React.FC<{ match: any; history: any }> = (props) => {
   const [status, setStatus] = useState('');
   const [orders, setOrders] = useState([] as any);
   const [id, setId] = useState('');
   const [note, setNote] = useState('');
+  const [showLoading, setShowLoading] = useState(false);
 
   const getTableOrder = useCallback(() => {
     const firebaseId = props.match.params.id;
@@ -32,6 +36,24 @@ const TableOrderGeneral: React.FC<{ match: any }> = (props) => {
         });
     }
   }, [props.match.params.id, props.match.params.area]);
+
+  const finishOrder = () => {
+    setShowLoading(true);
+    axios
+      .patch(
+        `https://waiterio.firebaseio.com/tables/${props.match.params.area}/${props.match.params.id}.json`,
+        {
+          orders: null,
+          note: null,
+          status: 'free',
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        setShowLoading(false);
+        props.history.replace('/orders');
+      });
+  };
 
   const displayOrders = () => {
     if (orders) {
@@ -57,7 +79,7 @@ const TableOrderGeneral: React.FC<{ match: any }> = (props) => {
         </IonCard>
       );
     }
-    return <div className={classes.item}>No orders</div>;
+    return <div className={classes.item + ' ion-padding'}>No orders</div>;
   };
 
   useEffect(() => getTableOrder(), [getTableOrder]);
@@ -67,6 +89,9 @@ const TableOrderGeneral: React.FC<{ match: any }> = (props) => {
       <div className={classes.container}>
         <IonHeader>
           <IonToolbar>
+            <IonButtons slot='start'>
+              <IonBackButton defaultHref='/orders' />
+            </IonButtons>
             <IonTitle>Bàn: {id}</IonTitle>
           </IonToolbar>
         </IonHeader>
@@ -79,6 +104,19 @@ const TableOrderGeneral: React.FC<{ match: any }> = (props) => {
           </div>
         ) : null}
         {displayOrders()}
+        <IonButton
+          expand='block'
+          color='success'
+          disabled={!orders}
+          onClick={finishOrder}
+        >
+          Hoàn thành đơn
+        </IonButton>
+        <IonLoading
+          isOpen={showLoading}
+          onDidDismiss={() => setShowLoading(false)}
+          message={'Loading...'}
+        />
       </div>
     );
   }
