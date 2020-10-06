@@ -8,10 +8,12 @@ import {
   IonHeader,
   IonLabel,
   IonLoading,
+  IonModal,
   IonTitle,
   IonToolbar,
 } from '@ionic/react';
 import classes from './TableOrderGeneral.module.css';
+import TableReserve from './TableReserve/TableReserve';
 
 const TableOrderGeneral: React.FC<{ match: any; history: any }> = (props) => {
   const [status, setStatus] = useState('');
@@ -19,6 +21,7 @@ const TableOrderGeneral: React.FC<{ match: any; history: any }> = (props) => {
   const [id, setId] = useState('');
   const [note, setNote] = useState('');
   const [showLoading, setShowLoading] = useState(false);
+  const [showModalReserve, setShowModalReserve] = useState(false);
 
   const getTableOrder = useCallback(() => {
     const firebaseId = props.match.params.id;
@@ -55,6 +58,40 @@ const TableOrderGeneral: React.FC<{ match: any; history: any }> = (props) => {
       });
   };
 
+  const reserveTable = (note: any) => {
+    setShowLoading(true);
+    axios
+      .patch(
+        `https://waiterio.firebaseio.com/tables/${props.match.params.area}/${props.match.params.id}.json`,
+        {
+          note,
+          status: 'reserviert',
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        setShowLoading(false);
+        props.history.replace('/orders');
+      });
+  };
+
+  const cancelReservation = () => {
+    setShowLoading(true);
+    axios
+      .patch(
+        `https://waiterio.firebaseio.com/tables/${props.match.params.area}/${props.match.params.id}.json`,
+        {
+          note: null,
+          status: 'free',
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        setShowLoading(false);
+        props.history.replace('/orders');
+      });
+  };
+
   const displayOrders = () => {
     if (orders) {
       const totalPrice = orders.reduce(
@@ -79,7 +116,35 @@ const TableOrderGeneral: React.FC<{ match: any; history: any }> = (props) => {
         </IonCard>
       );
     }
+
     return <div className={classes.item + ' ion-padding'}>No orders</div>;
+  };
+
+  const displayReserveButton = () => {
+    if (status === 'free') {
+      return (
+        <IonButton
+          className={classes.reserveButton}
+          color='secondary'
+          expand='block'
+          onClick={() => setShowModalReserve(true)}
+        >
+          Đặt bàn
+        </IonButton>
+      );
+    }
+    if (status === 'reserviert') {
+      return (
+        <IonButton
+          className={classes.reserveButton}
+          color='danger'
+          expand='block'
+          onClick={cancelReservation}
+        >
+          Huỷ đặt bàn
+        </IonButton>
+      );
+    }
   };
 
   useEffect(() => getTableOrder(), [getTableOrder]);
@@ -104,6 +169,7 @@ const TableOrderGeneral: React.FC<{ match: any; history: any }> = (props) => {
           </div>
         ) : null}
         {displayOrders()}
+        {displayReserveButton()}
         <IonButton
           expand='block'
           color='success'
@@ -112,6 +178,11 @@ const TableOrderGeneral: React.FC<{ match: any; history: any }> = (props) => {
         >
           Hoàn thành đơn
         </IonButton>
+
+        <IonModal isOpen={showModalReserve} cssClass='my-custom-class'>
+          <TableReserve onReserveTable={reserveTable} />
+        </IonModal>
+
         <IonLoading
           isOpen={showLoading}
           onDidDismiss={() => setShowLoading(false)}
