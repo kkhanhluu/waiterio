@@ -9,7 +9,9 @@ import {
 } from '@ionic/react';
 import React, { useState } from 'react';
 
-const TableReserve: React.FC<{ onReserveTable: any }> = (props) => {
+const TableReserve: React.FC<{ onReserveTable: any; onCloseModal: any }> = (
+  props
+) => {
   const [name, setName] = useState('');
   const [numberPerson, setNumberPersons] = useState(0);
   const [time, setTime] = useState('');
@@ -64,6 +66,9 @@ const TableReserve: React.FC<{ onReserveTable: any }> = (props) => {
         color='secondary'
       >
         Đặt bàn
+      </IonButton>
+      <IonButton expand='block' onClick={props.onCloseModal} color='danger'>
+        Huỷ
       </IonButton>
     </IonList>
   );

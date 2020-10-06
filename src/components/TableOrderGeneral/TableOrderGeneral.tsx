@@ -75,6 +75,10 @@ const TableOrderGeneral: React.FC<{ match: any; history: any }> = (props) => {
       });
   };
 
+  const closeModal = () => {
+    setShowModalReserve(false);
+  };
+
   const cancelReservation = () => {
     setShowLoading(true);
     axios
@@ -180,7 +184,10 @@ const TableOrderGeneral: React.FC<{ match: any; history: any }> = (props) => {
         </IonButton>
 
         <IonModal isOpen={showModalReserve} cssClass='my-custom-class'>
-          <TableReserve onReserveTable={reserveTable} />
+          <TableReserve
+            onReserveTable={reserveTable}
+            onCloseModal={closeModal}
+          />
         </IonModal>
 
         <IonLoading
